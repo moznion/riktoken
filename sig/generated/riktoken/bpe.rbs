@@ -1,0 +1,55 @@
+# Generated from lib/riktoken/bpe.rb with RBS::Inline
+
+module Riktoken
+  class BPE
+    type rank = Integer
+
+    type tuple[T, U] = [ T, U ]
+
+    attr_reader encoder: Hash[String, rank]
+
+    attr_reader decoder: Hash[rank, String]
+
+    attr_reader special_tokens_encoder: Hash[String, rank]
+
+    attr_reader special_tokens_decoder: Hash[rank, String]
+
+    attr_reader regex: Regexp
+
+    attr_reader special_regex: Regexp
+
+    # @rbs encoder: Hash[String, rank]
+    # @rbs regex: Regexp
+    # @rbs special_tokens_encoder: Hash[String, rank]
+    def initialize: (encoder: Hash[String, rank], regex: Regexp, special_tokens_encoder: Hash[String, rank]) -> untyped
+
+    # @rbs return: Set[String]
+    def special_tokens: () -> Set[String]
+
+    # Encode given text into tokens using the BPE encoding without considering special tokens.
+    # @rbs text: String
+    # @return: Array[rank]
+    def encode_ordinary: (String text) -> untyped
+
+    # Encode given text into tokens using the BPE encoding, allowing for given special tokens.
+    # @rbs text: String
+    # @rbs allowed_special_tokens: Set[String]
+    # @return: tuple[Array[rank], Integer]
+    def encode: (String text, ?allowed_special_tokens: Set[String]) -> untyped
+
+    # Encode given text into tokens using the BPE encoding, allowing for all special tokens.
+    # @rbs text: String
+    # @rbs return: Array[rank]
+    def encode_with_special_tokens: (String text) -> Array[rank]
+
+    # Decode given tokens back into text encoded as UTF-8.
+    # @rbs tokens: Array[rank]
+    # @rbs return: String
+    def decode: (Array[rank] tokens) -> String
+
+    # @rbs piece: String
+    # @rbs ranks: Hash[String, rank]
+    # @rbs return: Array[rank]
+    def self.byte_pair_encode: (String piece, Hash[String, rank] ranks) -> Array[rank]
+  end
+end

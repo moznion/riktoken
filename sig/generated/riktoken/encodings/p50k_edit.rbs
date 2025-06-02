@@ -1,0 +1,16 @@
+# Generated from lib/riktoken/encodings/p50k_edit.rb with RBS::Inline
+
+module Riktoken
+  module Encodings
+    module P50K_EDIT
+      def self.load_encoding: (untyped registry) -> untyped
+
+      private
+
+      # TODO
+      def self.find_tiktoken_file: (untyped name) -> untyped
+
+      def self.create_test_ranks: () -> untyped
+    end
+  end
+end

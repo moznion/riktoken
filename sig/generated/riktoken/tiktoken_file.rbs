@@ -1,0 +1,12 @@
+# Generated from lib/riktoken/tiktoken_file.rb with RBS::Inline
+
+module Riktoken
+  class TiktokenFile
+    class ParseError < StandardError
+    end
+
+    def parse: (untyped content) -> untyped
+
+    def load: (untyped path) -> untyped
+  end
+end

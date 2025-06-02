@@ -1,0 +1,5 @@
+# Generated from lib/riktoken/version.rb with RBS::Inline
+
+module Riktoken
+  VERSION: ::String
+end

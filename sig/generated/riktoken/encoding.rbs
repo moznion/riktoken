@@ -1,0 +1,29 @@
+# Generated from lib/riktoken/encoding.rb with RBS::Inline
+
+module Riktoken
+  class Encoding
+    class DisallowedSpecialTokenError < StandardError
+    end
+
+    class InvalidTokenError < StandardError
+    end
+
+    attr_reader name: untyped
+
+    def initialize: (name: untyped, ranks: untyped, ?special_tokens: untyped, ?pattern: untyped) -> untyped
+
+    def encode: (untyped text, ?allowed_special: untyped, ?disallowed_special: untyped) -> untyped
+
+    def decode: (untyped tokens) -> untyped
+
+    def encode_ordinary: (untyped text) -> untyped
+
+    def encode_with_unstable: (untyped text) -> untyped
+
+    def token_byte_values: () -> untyped
+
+    private
+
+    def create_special_tokens_regex: (untyped special_tokens) -> untyped
+  end
+end

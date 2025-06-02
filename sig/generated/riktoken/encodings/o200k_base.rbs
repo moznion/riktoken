@@ -1,0 +1,15 @@
+# Generated from lib/riktoken/encodings/o200k_base.rb with RBS::Inline
+
+module Riktoken
+  module Encodings
+    module O200K_BASE
+      def self.load_encoding: (untyped registry) -> untyped
+
+      private
+
+      def self.find_tiktoken_file: (untyped name) -> untyped
+
+      def self.create_test_ranks: () -> untyped
+    end
+  end
+end

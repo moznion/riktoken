@@ -1,0 +1,52 @@
+# Generated from lib/riktoken/registry.rb with RBS::Inline
+
+module Riktoken
+  class Registry
+    class UnknownEncodingError < StandardError
+    end
+
+    class UnknownModelError < StandardError
+    end
+
+    def self.get_encoding: (untyped encoding_name) -> untyped
+
+    def self.encoding_for_model: (untyped model_name) -> untyped
+
+    def self.list_encoding_names: () -> untyped
+
+    def self.list_model_names: () -> untyped
+
+    def self.register_encoding: (name: untyped, ranks: untyped, ?special_tokens: untyped, ?pattern: untyped) -> untyped
+
+    def self.unregister_encoding: (untyped name) -> untyped
+
+    def self.encoding_from_file: (path: untyped, name: untyped, ?special_tokens: untyped, ?pattern: untyped) -> untyped
+
+    private def self.load_encoding: (untyped encoding_name) -> untyped
+
+    private def self.load_cl100k_base: () -> untyped
+
+    private def self.load_p50k_base: () -> untyped
+
+    private def self.load_p50k_edit: () -> untyped
+
+    private def self.load_r50k_base: () -> untyped
+
+    private def self.load_o200k_base: () -> untyped
+  end
+
+  # Module-level convenience methods
+  def self.get_encoding: (untyped encoding_name) -> untyped
+
+  def self.encoding_for_model: (untyped model_name) -> untyped
+
+  def self.list_encoding_names: () -> untyped
+
+  def self.list_model_names: () -> untyped
+
+  def self.register_encoding: (**untyped kwargs) -> untyped
+
+  def self.unregister_encoding: (untyped name) -> untyped
+
+  def self.encoding_from_file: (**untyped kwargs) -> untyped
+end

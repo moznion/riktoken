@@ -1,0 +1,6 @@
+# Generated from lib/riktoken.rb with RBS::Inline
+
+module Riktoken
+  class Error < StandardError
+  end
+end

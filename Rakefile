@@ -5,6 +5,14 @@ require "minitest/test_task"
 
 Minitest::TestTask.create
 
-require "standard/rake"
+require "rubocop/rake_task"
 
-task default: %i[test standard]
+RuboCop::RakeTask.new
+
+task default: %i[test rubocop]
+
+namespace :rbs do
+  task gen: %i[] do
+    sh "rbs-inline --output --opt-out lib"
+  end
+end

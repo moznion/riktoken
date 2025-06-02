@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "riktoken/version"
+require_relative "riktoken/registry"
 
-module Riktoken
-  class Error < StandardError; end
-  # Your code goes here...
-end
+module Riktoken; end
