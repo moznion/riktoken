@@ -7,11 +7,11 @@ Most of the code is ported from [openai/tiktoken](https://github.com/openai/tikt
 ## Features
 
 - Pure Ruby implementation (no native dependencies)
+- No any dependencies
 - Compatible with OpenAI's tiktoken encodings (partial)
 - Supports all major OpenAI model encodings (cl100k_base, o200k_base, p50k_base, etc.)
 - Special token handling
 - Model-to-encoding mapping
-- Efficient caching for performance
 
 ## Installation
 
