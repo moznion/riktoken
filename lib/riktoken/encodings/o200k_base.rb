@@ -16,14 +16,7 @@ module Riktoken
         ranks = TiktokenFile.new.load(find_tiktoken_file(name: ENCODING_NAME, base_dir: tiktoken_base_dir))
         special_tokens = {
           "<|endoftext|>" => 199999,
-          "<|fim_prefix|>" => 200000,
-          "<|fim_middle|>" => 200001,
-          "<|fim_suffix|>" => 200002,
-          "<|endofprompt|>" => 200003,
-          "<|startoftext|>" => 200004,
-          "<|image|>" => 200005,
-          "<|audio|>" => 200006,
-          "<|video|>" => 200007
+          "<|endofprompt|>" => 200018
         }
         pattern = Regexp.union([
           /[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?/,

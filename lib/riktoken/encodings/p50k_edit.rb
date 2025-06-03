@@ -17,9 +17,9 @@ module Riktoken
         ranks = TiktokenFile.new.load(find_tiktoken_file(name: TIKTOKEN_SIGNATURE_NAME, base_dir: tiktoken_base_dir))
         special_tokens = {
           "<|endoftext|>" => 50256,
-          "<|fim_prefix|>" => 50258,
-          "<|fim_middle|>" => 50259,
-          "<|fim_suffix|>" => 50260
+          "<|fim_prefix|>" => 50281,
+          "<|fim_middle|>" => 50282,
+          "<|fim_suffix|>" => 50283
         }
         pattern = /'(?:[sdmt]|ll|ve|re)| ?\p{L}++| ?\p{N}++| ?[^\s\p{L}\p{N}]++|\s++$|\s+(?!\S)|\s/
 
