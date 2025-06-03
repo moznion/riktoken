@@ -61,13 +61,13 @@ token_count = encoding.encode("Your text here").length
 
 ## Supported Encodings
 
-| Encoding | Models |
-|----------|--------|
-| `cl100k_base` | GPT-4, GPT-3.5-turbo, text-embedding-ada-002, text-embedding-3-small, text-embedding-3-large |
-| `o200k_base` | GPT-4o, GPT-4o-mini |
-| `p50k_base` | text-davinci-003, text-davinci-002, code-davinci-002 |
-| `p50k_edit` | text-davinci-edit-001, code-davinci-edit-001 |
-| `r50k_base` | text-davinci-001, text-curie-001, text-babbage-001, text-ada-001 |
+| Encoding | Models | tiktoken file name     |
+|----------|--------|------------------------|
+| `cl100k_base` | GPT-4, GPT-3.5-turbo, text-embedding-ada-002, text-embedding-3-small, text-embedding-3-large | `cl100k_base.tiktoken` |
+| `o200k_base` | GPT-4o, GPT-4o-mini | `o200k_base.tiktoken` |
+| `p50k_base` | text-davinci-003, text-davinci-002, code-davinci-002 | `p50k_base.tiktoken` |
+| `p50k_edit` | text-davinci-edit-001, code-davinci-edit-001 | `p50k_base.tiktoken` |
+| `r50k_base` | text-davinci-001, text-curie-001, text-babbage-001, text-ada-001 | `r50k_base.tiktoken` |
 
 ## Setting Up .tiktoken Files
 
