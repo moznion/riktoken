@@ -30,37 +30,6 @@ module Riktoken
           pattern: pattern
         )
       end
-
-      private
-
-      class << self
-        def self.create_test_ranks
-          # Create a simplified set of ranks for testing
-          # In production, this would be loaded from a .tiktoken file
-          ranks = {}
-
-          # Single byte tokens (essential for basic character handling)
-          256.times do |i|
-            ranks[i.chr] = i
-          end
-
-          # Add common word tokens
-          common_tokens = {
-            "Hello" => 9906,
-            " world" => 10917,
-            "Hello world" => 15496,
-            "test" => 1985,
-            "Testing" => 11985,
-            "UTF" => 22865,
-            "世" => 19990,
-            "界" => 30181
-          }
-
-          ranks.merge!(common_tokens)
-
-          ranks
-        end
-      end
     end
   end
 end
