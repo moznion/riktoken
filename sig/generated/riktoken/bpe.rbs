@@ -26,16 +26,16 @@ module Riktoken
     # @rbs return: Set[String]
     def special_tokens: () -> Set[String]
 
-    # Encode given text into tokens using the BPE encoding without considering special tokens.
-    # @rbs text: String
-    # @rbs return: Array[rank]
-    def encode_ordinary: (String text) -> Array[rank]
-
     # Encode given text into tokens using the BPE encoding, allowing for given special tokens.
     # @rbs text: String
     # @rbs allowed_special_tokens: Set[String]
     # @rbs return: tuple[Array[rank], Integer]
     def encode: (String text, ?allowed_special_tokens: Set[String]) -> tuple[Array[rank], Integer]
+
+    # Encode given text into tokens using the BPE encoding without considering special tokens.
+    # @rbs text: String
+    # @rbs return: Array[rank]
+    def encode_ordinary: (String text) -> Array[rank]
 
     # Encode given text into tokens using the BPE encoding, allowing for all special tokens.
     # @rbs text: String
