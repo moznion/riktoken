@@ -29,23 +29,6 @@ module Riktoken
       Set.new(@special_tokens_encoder.keys)
     end
 
-    # Encode given text into tokens using the BPE encoding without considering special tokens.
-    # @rbs text: String
-    # @rbs return: Array[rank]
-    def encode_ordinary(text)
-      tokens = []
-      text.scan(@regex) do |m|
-        piece = m.is_a?(Array) ? m[0] : m
-        encoded = @encoder[piece]
-        if encoded
-          tokens << encoded
-        else
-          tokens.concat(self.class.byte_pair_encode(piece, @encoder))
-        end
-      end
-      tokens
-    end
-
     # Encode given text into tokens using the BPE encoding, allowing for given special tokens.
     # @rbs text: String
     # @rbs allowed_special_tokens: Set[String]
@@ -58,7 +41,7 @@ module Riktoken
       loop do
         next_special = nil
         start_find = start
-        while start_find < text.bytesize
+        while start_find < text.length
           m = @special_regex.match(text, start_find)
           if m.nil?
             break
@@ -70,7 +53,7 @@ module Riktoken
           end
         end
 
-        end_pos = next_special ? next_special.begin(0) : text.bytesize
+        end_pos = next_special ? next_special.begin(0) : text.length
 
         segment = text[start...end_pos]
         segment.scan(@regex) do |m|
@@ -95,6 +78,13 @@ module Riktoken
       end
 
       [tokens, last_piece_token_len]
+    end
+
+    # Encode given text into tokens using the BPE encoding without considering special tokens.
+    # @rbs text: String
+    # @rbs return: Array[rank]
+    def encode_ordinary(text)
+      encode(text)[0]
     end
 
     # Encode given text into tokens using the BPE encoding, allowing for all special tokens.
