@@ -10,10 +10,6 @@ module Riktoken
       # @rbs tiktoken_base_dir: String -- the directory where tiktoken files are stored
       # @rbs return: Riktoken::Encoding
       def self.load_encoding: (tiktoken_base_dir: String) -> Riktoken::Encoding
-
-      private
-
-      def self.create_test_ranks: () -> untyped
     end
   end
 end

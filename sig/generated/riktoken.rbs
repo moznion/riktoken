@@ -19,12 +19,19 @@ module Riktoken
   # @rbs encoding_name: String
   # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
   # @rbs return: Encoding
-  def self.get_encoding: (encoding_name: String, ?tiktoken_base_dir: String) -> Encoding
+  def self.get_encoding: (String encoding_name, ?tiktoken_base_dir: String) -> Encoding
 
   # @rbs model_name: String -- Name of the model (e.g., "gpt-3.5-turbo")
   # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
   # @rbs return: Encoding
-  def self.encoding_for_model: (model_name: String, ?tiktoken_base_dir: String) -> Encoding
+  def self.encoding_for_model: (String model_name, ?tiktoken_base_dir: String) -> Encoding
+
+  # @rbs name: String -- Name of the encoding
+  # @rbs ranks: Hash[String, rank] -- Token to rank mapping
+  # @rbs pattern: Regexp
+  # @rbs special_tokens: Hash[String, rank]
+  # @rbs return: Encoding
+  def self.make_encoding: (name: String, ranks: Hash[String, rank], pattern: Regexp, ?special_tokens: Hash[String, rank]) -> Encoding
 
   # @rbs path: String -- Path to the .tiktoken file
   # @rbs name: String -- Name of the encoding

@@ -1,28 +1,188 @@
 # Riktoken
 
-TODO: Delete this and the text below, and describe your gem
+A pure Ruby partial implementation of OpenAI's tiktoken library for BPE (Byte Pair Encoding) tokenization. Riktoken enables you to encode and decode text using the same tokenizers as OpenAI's models like GPT-4, GPT-3.5, and others.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/riktoken`. To experiment with that code, run `bin/console` for an interactive prompt.
+Most of the code is ported from [openai/tiktoken](https://github.com/openai/tiktoken).
+
+## Features
+
+- Pure Ruby implementation (no native dependencies)
+- Compatible with OpenAI's tiktoken encodings (partial)
+- Supports all major OpenAI model encodings (cl100k_base, o200k_base, p50k_base, etc.)
+- Special token handling
+- Model-to-encoding mapping
+- Efficient caching for performance
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
-
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+gem 'riktoken'
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+And then execute:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle install
 ```
 
-## Usage
+Or install it yourself as:
 
-TODO: Write usage instructions here
+```bash
+gem install riktoken
+```
+
+## Quick Start
+
+```ruby
+require 'riktoken'
+
+# Get encoding by name
+# You have to prepare `.tiktoken` files in the specified directory in advance.
+encoding = Riktoken.get_encoding("cl100k_base", tiktoken_base_dir: "#{ENV['HOME']}/.cache/tiktoken")
+
+# Or get encoding for a specific model
+# Once `tiktoken_base_dir` is omitted, it will use the default directory `${HOME}/.cache/tiktoken/` as default.
+encoding = Riktoken.encoding_for_model("gpt-4")
+
+# Encode text to tokens
+tokens = encoding.encode("Hello, world!")
+# => [9906, 11, 1917, 0]
+
+# Decode tokens back to text
+text = encoding.decode(tokens)
+# => "Hello, world!"
+
+# Count tokens
+token_count = encoding.encode("Your text here").length
+# => 3
+```
+
+## Supported Encodings
+
+| Encoding | Models |
+|----------|--------|
+| `cl100k_base` | GPT-4, GPT-3.5-turbo, text-embedding-ada-002, text-embedding-3-small, text-embedding-3-large |
+| `o200k_base` | GPT-4o, GPT-4o-mini |
+| `p50k_base` | text-davinci-003, text-davinci-002, code-davinci-002 |
+| `p50k_edit` | text-davinci-edit-001, code-davinci-edit-001 |
+| `r50k_base` | text-davinci-001, text-curie-001, text-babbage-001, text-ada-001 |
+
+## Setting Up .tiktoken Files
+
+For best accuracy, you should download the official .tiktoken files from OpenAI:
+
+```bash
+# Create cache directory as you like
+mkdir -p ~/.cache/tiktoken
+
+# Download encoding files
+curl -o ~/.cache/tiktoken/cl100k_base.tiktoken \
+  https://raw.githubusercontent.com/openai/tiktoken/main/tiktoken/assets/cl100k_base.tiktoken
+
+curl -o ~/.cache/tiktoken/o200k_base.tiktoken \
+  https://raw.githubusercontent.com/openai/tiktoken/main/tiktoken/assets/o200k_base.tiktoken
+
+# Add other encodings as needed...
+```
+
+The library will search for `.tiktoken` files in the given directory as a parameter `tiktoken_base_dir` (default is `${HOME}/.cache/tiktoken/`).
+
+NOTE: If no `.tiktoken` file is found, the library will raise an error on loading; it does not fall back to built-in encodings and/or downloads the file automatically. i.e. the user must guarantee that the `.tiktoken` files are available in the specified directory.
+
+## Usage Examples
+
+### Token Counting for API Cost Estimation
+
+```ruby
+encoding = Riktoken.encoding_for_model("gpt-4")
+text = "Your prompt here..."
+token_count = encoding.encode(text).length
+
+# Estimate API cost (example rates)
+input_cost_per_1k = 0.03  # $0.03 per 1K tokens
+estimated_cost = (token_count / 1000.0) * input_cost_per_1k
+puts "Token count: #{token_count}"
+puts "Estimated cost: $#{'%.4f' % estimated_cost}"
+```
+
+### Handling Special Tokens
+
+```ruby
+encoding = Riktoken.get_encoding("cl100k_base")
+
+# By default, special tokens raise an error
+begin
+  tokens = encoding.encode("Hello <|endoftext|> world")
+rescue Riktoken::Encoding::DisallowedSpecialTokenError
+  puts "Special tokens not allowed!"
+end
+
+# Allow specific special tokens
+tokens = encoding.encode("Hello <|endoftext|> world", allowed_special: ["<|endoftext|>"])
+
+# Allow all special tokens
+tokens = encoding.encode("Hello <|endoftext|> world", allowed_special: "all")
+```
+
+### Splitting Text by Token Limit
+
+```ruby
+def split_by_tokens(text, max_tokens, encoding)
+  tokens = encoding.encode(text)
+  chunks = []
+
+  tokens.each_slice(max_tokens) do |chunk|
+    chunks << encoding.decode(chunk)
+  end
+
+  chunks
+end
+
+# Example: Split text into 100-token chunks
+encoding = Riktoken.get_encoding("cl100k_base")
+chunks = split_by_tokens("Your long text here...", 100, encoding)
+```
+
+### List Available Encodings and Models
+
+```ruby
+# List all available encodings
+puts Riktoken.list_encoding_names
+# => ["cl100k_base", "o200k_base", "p50k_base", "p50k_edit", "r50k_base"]
+
+# List all supported models
+puts Riktoken.list_model_names
+# => ["gpt-4", "gpt-3.5-turbo", "text-davinci-003", ...]
+```
+
+## Advanced Usage
+
+### Custom Encodings
+
+```ruby
+# Make a custom encoding
+encoding = Riktoken.make_encoding(
+  name: "my_custom_encoding",
+  ranks: {"hello" => 0, "world" => 1},
+  special_tokens: {"<|custom|>" => 100},
+  pattern: /\w+/
+)
+
+tokens = encoding.encode('hello, world')
+```
+
+### Loading from Custom .tiktoken File
+
+```ruby
+encoding = Riktoken.encoding_from_file(
+  path: "path/to/custom.tiktoken",
+  name: "custom_encoding",
+  special_tokens: {"<|special|>" => 50000},
+  pattern: /'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}++|\p{N}{1,3}+| ?[^\s\p{L}\p{N}]++[\r\n]*+|\s++$|\s*[\r\n]|\s+(?!\S)|\s/
+)
+```
 
 ## Development
 
@@ -32,12 +192,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/riktoken. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/riktoken/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/moznion/riktoken. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/moznion/riktoken/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
-## Code of Conduct
-
-Everyone interacting in the Riktoken project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/riktoken/blob/main/CODE_OF_CONDUCT.md).

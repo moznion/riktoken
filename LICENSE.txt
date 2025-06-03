@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2025 moznion
+Copyright (c) 2025 Taiki Kawakami (a.k.a moznion) https://moznion.net
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
