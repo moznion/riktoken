@@ -72,7 +72,7 @@ module Riktoken
     # @rbs encoding_name: String
     # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
     # @rbs return: Encoding
-    def get_encoding(encoding_name:, tiktoken_base_dir: DEFAULT_TIKTOKEN_BASE_DIR)
+    def get_encoding(encoding_name, tiktoken_base_dir: DEFAULT_TIKTOKEN_BASE_DIR)
       enc_class = case encoding_name
       when "cl100k_base"
         Encodings::Cl100kBase
@@ -94,11 +94,25 @@ module Riktoken
     # @rbs model_name: String -- Name of the model (e.g., "gpt-3.5-turbo")
     # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
     # @rbs return: Encoding
-    def encoding_for_model(model_name:, tiktoken_base_dir: DEFAULT_TIKTOKEN_BASE_DIR)
+    def encoding_for_model(model_name, tiktoken_base_dir: DEFAULT_TIKTOKEN_BASE_DIR)
       encoding_name = MODEL_TO_ENCODING[model_name]
       raise UnknownModelError, "Unknown model: #{model_name}" unless encoding_name
 
-      get_encoding(encoding_name:, tiktoken_base_dir:)
+      get_encoding(encoding_name, tiktoken_base_dir:)
+    end
+
+    # @rbs name: String -- Name of the encoding
+    # @rbs ranks: Hash[String, rank] -- Token to rank mapping
+    # @rbs pattern: Regexp
+    # @rbs special_tokens: Hash[String, rank]
+    # @rbs return: Encoding
+    def make_encoding(name:, ranks:, pattern:, special_tokens: {})
+      Encoding.new(
+        name:,
+        ranks:,
+        special_tokens:,
+        pattern:
+      )
     end
 
     # @rbs path: String -- Path to the .tiktoken file

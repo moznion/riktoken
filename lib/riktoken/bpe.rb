@@ -19,7 +19,7 @@ module Riktoken
       @encoder = encoder
       @regex = regex
       @special_tokens_encoder = special_tokens_encoder
-      @special_regex = Regexp.union(special_tokens_encoder.keys.map { |s| Regexp.escape(s) })
+      @special_regex = Regexp.union(special_tokens_encoder.keys)
       @decoder = encoder.map { |k, v| [v, k] }.to_h
       @special_tokens_decoder = special_tokens_encoder.map { |k, v| [v, k] }.to_h
     end

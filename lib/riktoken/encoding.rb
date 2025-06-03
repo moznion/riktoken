@@ -33,7 +33,7 @@ module Riktoken
       disallowed_special = Set.new(@special_tokens.keys) - allowed_special if disallowed_special == "all"
 
       unless disallowed_special.empty?
-        found = text.scan(Regexp.union(disallowed_special.map { |token| Regexp.escape(token) })).uniq
+        found = text.scan(Regexp.union(disallowed_special.to_a)).uniq
         found_disallowed = found & disallowed_special.to_a
         unless found_disallowed.empty?
           raise DisallowedSpecialTokenError, "Disallowed special token(s) found: #{found_disallowed.join(", ")}"
