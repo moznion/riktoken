@@ -43,7 +43,7 @@ require 'riktoken'
 encoding = Riktoken.get_encoding("cl100k_base", tiktoken_base_dir: "#{ENV['HOME']}/.cache/tiktoken")
 
 # Or get encoding for a specific model
-# Once `tiktoken_base_dir` is omitted, it will use the default directory `${HOME}/.cache/tiktoken/` as default.
+# Once `tiktoken_base_dir` is omitted, it will use the directory `${HOME}/.cache/tiktoken/` as default.
 encoding = Riktoken.encoding_for_model("gpt-4")
 
 # Encode text to tokens
