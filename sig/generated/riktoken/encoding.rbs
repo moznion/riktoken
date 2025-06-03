@@ -10,20 +10,25 @@ module Riktoken
 
     attr_reader name: untyped
 
-    def initialize: (name: untyped, ranks: untyped, ?special_tokens: untyped, ?pattern: untyped) -> untyped
+    @special_tokens: Hash[String, rank]
 
-    def encode: (untyped text, ?allowed_special: untyped, ?disallowed_special: untyped) -> untyped
+    @bpe: BPE
 
-    def decode: (untyped tokens) -> untyped
+    # @rbs name: String
+    # @rbs ranks: Hash[String, rank]
+    # @rbs special_tokens: Hash[String, rank]
+    # @rbs pattern: Regexp
+    # @rbs return: Encoding
+    def initialize: (name: String, ranks: Hash[String, rank], pattern: Regexp, ?special_tokens: Hash[String, rank]) -> Encoding
 
-    def encode_ordinary: (untyped text) -> untyped
+    # @rbs text: String
+    # @rbs allowed_special: Set[String]|"all"
+    # @rbs disallowed_special: Set[String]|"all"
+    # @rbs return: Array[rank]
+    def encode: (String text, ?allowed_special: Set[String] | "all", ?disallowed_special: Set[String] | "all") -> Array[rank]
 
-    def encode_with_unstable: (untyped text) -> untyped
-
-    def token_byte_values: () -> untyped
-
-    private
-
-    def create_special_tokens_regex: (untyped special_tokens) -> untyped
+    # @rbs tokens: Array[rank]
+    # @rbs return: String
+    def decode: (Array[rank] tokens) -> String
   end
 end

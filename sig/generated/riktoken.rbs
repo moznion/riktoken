@@ -1,6 +1,41 @@
 # Generated from lib/riktoken.rb with RBS::Inline
 
 module Riktoken
-  class Error < StandardError
+  type rank = Integer
+
+  type tuple[T, U] = [ T, U ]
+
+  class UnknownEncodingError < StandardError
   end
+
+  class UnknownModelError < StandardError
+  end
+
+  MODEL_TO_ENCODING: untyped
+
+  DEFAULT_TIKTOKEN_BASE_DIR: untyped
+
+  # Get the encoding by name (like "cl100k_base").
+  # @rbs encoding_name: String
+  # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
+  # @rbs return: Encoding
+  def self.get_encoding: (encoding_name: String, ?tiktoken_base_dir: String) -> Encoding
+
+  # @rbs model_name: String -- Name of the model (e.g., "gpt-3.5-turbo")
+  # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
+  # @rbs return: Encoding
+  def self.encoding_for_model: (model_name: String, ?tiktoken_base_dir: String) -> Encoding
+
+  # @rbs path: String -- Path to the .tiktoken file
+  # @rbs name: String -- Name of the encoding
+  # @rbs pattern: Regexp
+  # @rbs special_tokens: Hash[String, rank]
+  # @rbs return: Encoding
+  def self.encoding_from_file: (path: String, name: String, pattern: Regexp, ?special_tokens: Hash[String, rank]) -> Encoding
+
+  # @rbs return: Array[String]
+  def self.list_encoding_names: () -> Array[String]
+
+  # @rbs return: Array[String]
+  def self.list_model_names: () -> Array[String]
 end

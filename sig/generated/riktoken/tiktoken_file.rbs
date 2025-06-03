@@ -5,7 +5,10 @@ module Riktoken
     class ParseError < StandardError
     end
 
-    def parse: (untyped content) -> untyped
+    # Parses a .tiktoken file content and returns a hash mapping base64-encoded tokens to their ranks.
+    # @rbs content: String
+    # @rbs return: Hash[String, Integer]
+    def parse: (String content) -> Hash[String, Integer]
 
     def load: (untyped path) -> untyped
   end

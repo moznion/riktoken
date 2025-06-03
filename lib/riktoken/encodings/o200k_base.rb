@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../tiktoken_file"
 require_relative "../encodings"
 
 module Riktoken
@@ -8,16 +7,13 @@ module Riktoken
     module O200kBase
       include Riktoken::Encodings
 
-      def self.load_encoding(registry)
-        tiktoken_file = TiktokenFile.new
+      ENCODING_NAME = "o200k_base"
+      private_constant :ENCODING_NAME
 
-        # Load ranks from .tiktoken file
-        begin
-          ranks = tiktoken_file.load(find_tiktoken_file("o200k_base"))
-        rescue
-          # Fallback to test ranks if .tiktoken file is not found
-          ranks = create_test_ranks
-        end
+      # @rbs tiktoken_base_dir: String -- the directory where tiktoken files are stored
+      # @rbs return: Riktoken::Encoding
+      def self.load_encoding(tiktoken_base_dir:)
+        ranks = TiktokenFile.new.load(find_tiktoken_file(name: ENCODING_NAME, base_dir: tiktoken_base_dir))
         special_tokens = {
           "<|endoftext|>" => 199999,
           "<|fim_prefix|>" => 200000,
@@ -29,8 +25,6 @@ module Riktoken
           "<|audio|>" => 200006,
           "<|video|>" => 200007
         }
-
-        # Pattern for o200k_base (simplified version)
         pattern = Regexp.union([
           /[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?/,
           /[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]+[\p{Ll}\p{Lm}\p{Lo}\p{M}]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?/,
@@ -41,8 +35,8 @@ module Riktoken
           /\s+/
         ])
 
-        registry.register_encoding(
-          name: "o200k_base",
+        Riktoken::Encoding.new(
+          name: ENCODING_NAME,
           ranks: ranks,
           special_tokens: special_tokens,
           pattern: pattern
@@ -52,18 +46,6 @@ module Riktoken
       private
 
       class << self
-        def find_tiktoken_file(name)
-          # Look for .tiktoken file in common locations
-          possible_paths = [
-            File.join(__dir__, "#{name}.tiktoken"),
-            File.join(Dir.home, ".cache", "tiktoken", "#{name}.tiktoken"),
-            File.join("/tmp", "tiktoken", "#{name}.tiktoken")
-          ]
-
-          possible_paths.find { |path| File.exist?(path) } ||
-            raise("Could not find #{name}.tiktoken file")
-        end
-
         def self.create_test_ranks
           # Create a larger vocabulary for o200k_base (200K tokens)
           ranks = {}

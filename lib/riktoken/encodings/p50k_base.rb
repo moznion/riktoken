@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../tiktoken_file"
 require_relative "../encodings"
 
 module Riktoken
@@ -8,25 +7,20 @@ module Riktoken
     module P50kBase
       include Riktoken::Encodings
 
-      def self.load_encoding(registry)
-        tiktoken_file = TiktokenFile.new
+      ENCODING_NAME = "p50k_base"
+      private_constant :ENCODING_NAME
 
-        # Load ranks from .tiktoken file
-        begin
-          ranks = tiktoken_file.load(find_tiktoken_file("p50k_base"))
-        rescue
-          # Fallback to test ranks if .tiktoken file is not found
-          ranks = create_test_ranks
-        end
+      # @rbs tiktoken_base_dir: String -- the directory where tiktoken files are stored
+      # @rbs return: Riktoken::Encoding
+      def self.load_encoding(tiktoken_base_dir:)
+        ranks = TiktokenFile.new.load(find_tiktoken_file(name: ENCODING_NAME, base_dir: tiktoken_base_dir))
         special_tokens = {
           "<|endoftext|>" => 50256
         }
-
-        # Pattern for p50k_base (r50k pattern)
         pattern = /'(?:[sdmt]|ll|ve|re)| ?\p{L}++| ?\p{N}++| ?[^\s\p{L}\p{N}]++|\s++$|\s+(?!\S)|\s/
 
-        registry.register_encoding(
-          name: "p50k_base",
+        Riktoken::Encoding.new(
+          name: ENCODING_NAME,
           ranks: ranks,
           special_tokens: special_tokens,
           pattern: pattern
@@ -36,18 +30,6 @@ module Riktoken
       private
 
       class << self
-        def find_tiktoken_file(name)
-          # Look for .tiktoken file in common locations
-          possible_paths = [
-            File.join(__dir__, "#{name}.tiktoken"),
-            File.join(Dir.home, ".cache", "tiktoken", "#{name}.tiktoken"),
-            File.join("/tmp", "tiktoken", "#{name}.tiktoken")
-          ]
-
-          possible_paths.find { |path| File.exist?(path) } ||
-            raise("Could not find #{name}.tiktoken file")
-        end
-
         def self.create_test_ranks
           # Create a basic set of ranks for testing
           # Similar to cl100k_base but with different token IDs

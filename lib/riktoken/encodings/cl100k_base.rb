@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../tiktoken_file"
 require_relative "../encodings"
 
 module Riktoken
@@ -8,17 +7,13 @@ module Riktoken
     module Cl100kBase
       include Riktoken::Encodings
 
-      def self.load_encoding(registry)
-        tiktoken_file = TiktokenFile.new
+      ENCODING_NAME = "cl100k_base"
+      private_constant :ENCODING_NAME
 
-        # Load ranks from .tiktoken file
-        begin
-          ranks = tiktoken_file.load(find_tiktoken_file("cl100k_base"))
-        rescue
-          # Fallback to test ranks if .tiktoken file is not found
-          ranks = create_test_ranks
-        end
-
+      # @rbs tiktoken_base_dir: String -- the directory where tiktoken files are stored
+      # @rbs return: Riktoken::Encoding
+      def self.load_encoding(tiktoken_base_dir:)
+        ranks = TiktokenFile.new.load(find_tiktoken_file(name: ENCODING_NAME, base_dir: tiktoken_base_dir))
         special_tokens = {
           "<|endoftext|>" => 100257,
           "<|fim_prefix|>" => 100258,
@@ -26,12 +21,10 @@ module Riktoken
           "<|fim_suffix|>" => 100260,
           "<|endofprompt|>" => 100276
         }
-
-        # Pattern for cl100k_base (based on OpenAI implementation)
         pattern = /'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}++|\p{N}{1,3}+| ?[^\s\p{L}\p{N}]++[\r\n]*+|\s++$|\s*[\r\n]|\s+(?!\S)|\s/
 
-        registry.register_encoding(
-          name: "cl100k_base",
+        Riktoken::Encoding.new(
+          name: ENCODING_NAME,
           ranks: ranks,
           special_tokens: special_tokens,
           pattern: pattern

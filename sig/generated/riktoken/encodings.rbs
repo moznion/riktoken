@@ -1,0 +1,18 @@
+# Generated from lib/riktoken/encodings.rb with RBS::Inline
+
+module Riktoken
+  module Encodings
+    class FileNotFoundError < StandardError
+    end
+
+    def self.included: (untyped base) -> untyped
+
+    module ClassMethods
+      # Look for .tiktoken file in common locations
+      # @rbs name: String
+      # @rbs base_dir: String -- a directory to find the tiktoken file
+      # @rbs return: String
+      def find_tiktoken_file: (name: String, base_dir: String) -> String
+    end
+  end
+end

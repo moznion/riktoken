@@ -2,12 +2,16 @@
 
 module Riktoken
   module Encodings
-    module O200K_BASE
-      def self.load_encoding: (untyped registry) -> untyped
+    module O200kBase
+      include Riktoken::Encodings
+
+      ENCODING_NAME: ::String
+
+      # @rbs tiktoken_base_dir: String -- the directory where tiktoken files are stored
+      # @rbs return: Riktoken::Encoding
+      def self.load_encoding: (tiktoken_base_dir: String) -> Riktoken::Encoding
 
       private
-
-      def self.find_tiktoken_file: (untyped name) -> untyped
 
       def self.create_test_ranks: () -> untyped
     end

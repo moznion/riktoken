@@ -6,18 +6,18 @@ module Riktoken
   class TiktokenFile
     class ParseError < StandardError; end
 
+    # Parses a .tiktoken file content and returns a hash mapping base64-encoded tokens to their ranks.
+    # @rbs content: String
+    # @rbs return: Hash[String, Integer]
     def parse(content)
       ranks = {}
 
       content.each_line do |line|
         line = line.strip
 
-        # Skip empty lines and comments
         next if line.empty? || line.start_with?("#")
 
-        # Parse line: base64_token rank
         parts = line.split(/\s+/)
-
         if parts.length != 2
           raise ParseError, "Invalid line format: #{line}"
         end

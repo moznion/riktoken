@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../tiktoken_file"
 require_relative "../encodings"
 
 module Riktoken
@@ -8,25 +7,20 @@ module Riktoken
     module R50kBase
       include Riktoken::Encodings
 
-      def self.load_encoding(registry)
-        tiktoken_file = TiktokenFile.new
+      ENCODING_NAME = "r50k_base"
+      private_constant :ENCODING_NAME
 
-        # Load ranks from .tiktoken file
-        begin
-          ranks = tiktoken_file.load(find_tiktoken_file("r50k_base"))
-        rescue
-          # Fallback to test ranks if .tiktoken file is not found
-          ranks = create_test_ranks
-        end
+      # @rbs tiktoken_base_dir: String -- the directory where tiktoken files are stored
+      # @rbs return: Riktoken::Encoding
+      def self.load_encoding(tiktoken_base_dir:)
+        ranks = TiktokenFile.new.load(find_tiktoken_file(name: ENCODING_NAME, base_dir: tiktoken_base_dir))
         special_tokens = {
           "<|endoftext|>" => 50256
         }
-
-        # Pattern for r50k_base
         pattern = /'(?:[sdmt]|ll|ve|re)| ?\p{L}++| ?\p{N}++| ?[^\s\p{L}\p{N}]++|\s++$|\s+(?!\S)|\s/
 
-        registry.register_encoding(
-          name: "r50k_base",
+        Riktoken::Encoding.new(
+          name: ENCODING_NAME,
           ranks: ranks,
           special_tokens: special_tokens,
           pattern: pattern

@@ -2,9 +2,7 @@
 
 module Riktoken
   class BPE
-    # @rbs!
-    #   type rank = Integer
-    #   type tuple[T, U] = [T, U]
+    class TextEncodingError < StandardError; end
 
     attr_reader :encoder #: Hash[String, rank] -- parameter like parsed *.tiktoken file
     attr_reader :decoder  #: Hash[rank, String]
@@ -16,6 +14,7 @@ module Riktoken
     # @rbs encoder: Hash[String, rank]
     # @rbs regex: Regexp
     # @rbs special_tokens_encoder: Hash[String, rank]
+    # @rbs return: BPE
     def initialize(encoder:, regex:, special_tokens_encoder:)
       @encoder = encoder
       @regex = regex
@@ -32,7 +31,7 @@ module Riktoken
 
     # Encode given text into tokens using the BPE encoding without considering special tokens.
     # @rbs text: String
-    # @return: Array[rank]
+    # @rbs return: Array[rank]
     def encode_ordinary(text)
       tokens = []
       text.scan(@regex) do |m|
@@ -50,7 +49,7 @@ module Riktoken
     # Encode given text into tokens using the BPE encoding, allowing for given special tokens.
     # @rbs text: String
     # @rbs allowed_special_tokens: Set[String]
-    # @return: tuple[Array[rank], Integer]
+    # @rbs return: tuple[Array[rank], Integer]
     def encode(text, allowed_special_tokens: Set.new)
       tokens = []
       start = 0
@@ -100,9 +99,9 @@ module Riktoken
 
     # Encode given text into tokens using the BPE encoding, allowing for all special tokens.
     # @rbs text: String
-    # @rbs return: Array[rank]
+    # @rbs return: tuple[Array[rank], Integer]
     def encode_with_special_tokens(text)
-      encode(text, allowed_special_tokens: special_tokens)[0]
+      encode(text, allowed_special_tokens: special_tokens)
     end
 
     # Decode given tokens back into text encoded as UTF-8.
@@ -114,7 +113,7 @@ module Riktoken
       if encoded.valid_encoding?
         encoded
       else
-        raise "TODO TODO TODO"
+        raise TextEncodingError, "failed to apply the text encoding to decoded tokens as valid UTF-8"
       end
     end
 
