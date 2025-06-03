@@ -6,7 +6,7 @@ Most of the code is ported from [openai/tiktoken](https://github.com/openai/tikt
 
 ## Features
 
-- Pure Ruby implementation (no native dependencies)
+- Pure Ruby implementation (no native dependencies) <= **this is one of the main motivations for this library**
 - No any dependencies
 - Compatible with OpenAI's tiktoken encodings (partial)
 - Supports all major OpenAI model encodings (cl100k_base, o200k_base, p50k_base, etc.)
@@ -43,7 +43,7 @@ require 'riktoken'
 encoding = Riktoken.get_encoding("cl100k_base", tiktoken_base_dir: "#{ENV['HOME']}/.cache/tiktoken")
 
 # Or get encoding for a specific model
-# Once `tiktoken_base_dir` is omitted, it will use the directory `${HOME}/.cache/tiktoken/` as default.
+# Once `tiktoken_base_dir` is omitted, it will use the directory `ENV[TIKTOKEN_BASE_DIR] || #{ENV['HOME']}/.cache/tiktoken/` as default.
 encoding = Riktoken.encoding_for_model("gpt-4")
 
 # Encode text to tokens
@@ -87,7 +87,7 @@ curl -o ~/.cache/tiktoken/o200k_base.tiktoken \
 # Add other encodings as needed...
 ```
 
-The library will search for `.tiktoken` files in the given directory as a parameter `tiktoken_base_dir` (default is `${HOME}/.cache/tiktoken/`).
+The library will search for `.tiktoken` files in the given directory as a parameter `tiktoken_base_dir` (default is `ENV[TIKTOKEN_BASE_DIR] || #{ENV['HOME']}/.cache/tiktoken/`).
 
 NOTE: If no `.tiktoken` file is found, the library will raise an error on loading; it does not fall back to built-in encodings and/or downloads the file automatically. i.e. the user must guarantee that the `.tiktoken` files are available in the specified directory.
 
@@ -183,6 +183,11 @@ encoding = Riktoken.encoding_from_file(
   pattern: /'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}++|\p{N}{1,3}+| ?[^\s\p{L}\p{N}]++[\r\n]*+|\s++$|\s*[\r\n]|\s+(?!\S)|\s/
 )
 ```
+
+## Precedents
+
+[IAPark/tiktoken_ruby](https://github.com/IAPark/tiktoken_ruby) is a Ruby port of OpenAI's tiktoken library uses native extensions.
+This would be a good choice if you need a faster implementation with native performance.
 
 ## Development
 

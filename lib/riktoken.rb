@@ -65,14 +65,15 @@ module Riktoken
     "gpt-4o-mini" => "o200k_base"
   }.freeze
   DEFAULT_TIKTOKEN_BASE_DIR = File.join(Dir.home, ".cache", "tiktoken").freeze
-  private_constant :MODEL_TO_ENCODING, :DEFAULT_TIKTOKEN_BASE_DIR
+  TIKTOKEN_BASE_DIR_ENV_KEY = "TIKTOKEN_BASE_DIR"
+  private_constant :MODEL_TO_ENCODING, :DEFAULT_TIKTOKEN_BASE_DIR, :TIKTOKEN_BASE_DIR_ENV_KEY
 
   class << self
     # Get the encoding by name (like "cl100k_base").
     # @rbs encoding_name: String
     # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
     # @rbs return: Encoding
-    def get_encoding(encoding_name, tiktoken_base_dir: DEFAULT_TIKTOKEN_BASE_DIR)
+    def get_encoding(encoding_name, tiktoken_base_dir: default_tiktoken_base_dir)
       enc_class = case encoding_name
       when "cl100k_base"
         Encodings::Cl100kBase
@@ -94,7 +95,7 @@ module Riktoken
     # @rbs model_name: String -- Name of the model (e.g., "gpt-3.5-turbo")
     # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
     # @rbs return: Encoding
-    def encoding_for_model(model_name, tiktoken_base_dir: DEFAULT_TIKTOKEN_BASE_DIR)
+    def encoding_for_model(model_name, tiktoken_base_dir: default_tiktoken_base_dir)
       encoding_name = MODEL_TO_ENCODING[model_name]
       raise UnknownModelError, "Unknown model: #{model_name}" unless encoding_name
 
@@ -140,6 +141,15 @@ module Riktoken
     # @rbs return: Array[String]
     def list_model_names
       MODEL_TO_ENCODING.keys
+    end
+  end
+
+  private
+
+  class << self
+    # @rbs return: String
+    def default_tiktoken_base_dir
+      ENV[TIKTOKEN_BASE_DIR_ENV_KEY] || DEFAULT_TIKTOKEN_BASE_DIR
     end
   end
 end

@@ -15,6 +15,8 @@ module Riktoken
 
   DEFAULT_TIKTOKEN_BASE_DIR: untyped
 
+  TIKTOKEN_BASE_DIR_ENV_KEY: ::String
+
   # Get the encoding by name (like "cl100k_base").
   # @rbs encoding_name: String
   # @rbs tiktoken_base_dir: String -- Base directory for tiktoken files
@@ -45,4 +47,9 @@ module Riktoken
 
   # @rbs return: Array[String]
   def self.list_model_names: () -> Array[String]
+
+  private
+
+  # @rbs return: String
+  def self.default_tiktoken_base_dir: () -> String
 end
