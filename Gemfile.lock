@@ -9,6 +9,7 @@ GEM
   specs:
     ast (2.4.3)
     base64 (0.3.0)
+    docile (1.4.1)
     json (2.12.2)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
@@ -46,6 +47,12 @@ GEM
       rubocop (>= 1.72.1, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
     ruby-progressbar (1.13.0)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.1)
+    simplecov_json_formatter (0.1.4)
     standard (1.35.0.1)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
@@ -72,6 +79,7 @@ DEPENDENCIES
   rbs-inline (~> 0.11.0)
   riktoken!
   rubocop (~> 1.74)
+  simplecov (~> 0.22)
   standard (~> 1.35)
 
 BUNDLED WITH

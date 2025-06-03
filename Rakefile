@@ -11,6 +11,12 @@ RuboCop::RakeTask.new
 
 task default: %i[test rubocop]
 
+desc "Run tests with code coverage"
+task :coverage do
+  ENV["COVERAGE"] = "true"
+  Rake::Task["test"].invoke
+end
+
 namespace :rbs do
   task gen: %i[] do
     sh "rbs-inline --output --opt-out lib"
