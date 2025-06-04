@@ -35,15 +35,37 @@ gem install riktoken
 
 ## Quick Start
 
+### Setting Up .tiktoken Files
+
+You have to download the official `.tiktoken` files from OpenAI and locate them to arbitrary directory in advance:
+
+```bash
+# Create base directory as you like (`~/.riktoken` is the default location)
+mkdir -p ~/.riktoken
+
+# Download encoding files
+curl -o ~/.riktoken/cl100k_base.tiktoken \
+  https://raw.githubusercontent.com/openai/tiktoken/main/tiktoken/assets/cl100k_base.tiktoken
+
+curl -o ~/.riktoken/o200k_base.tiktoken \
+  https://raw.githubusercontent.com/openai/tiktoken/main/tiktoken/assets/o200k_base.tiktoken
+
+# Add other encodings as needed...
+```
+
+The library will search for `.tiktoken` files in the given directory as a parameter `tiktoken_base_dir` (default is `ENV[TIKTOKEN_BASE_DIR] || #{ENV['HOME']}/.riktoken/`).
+
+**NOTE: If no `.tiktoken` file is found, the library will raise an error on loading; it does not fall back to built-in encodings and/or downloads the file automatically. i.e. the user must guarantee that the `.tiktoken` files are available in the specified directory.**
+
 ```ruby
 require 'riktoken'
 
 # Get encoding by name
 # You have to prepare `.tiktoken` files in the specified directory in advance.
-encoding = Riktoken.get_encoding("cl100k_base", tiktoken_base_dir: "#{ENV['HOME']}/.cache/tiktoken")
+encoding = Riktoken.get_encoding("cl100k_base", tiktoken_base_dir: "#{ENV['HOME']}/.riktoken")
 
 # Or get encoding for a specific model
-# Once `tiktoken_base_dir` is omitted, it will use the directory `ENV[TIKTOKEN_BASE_DIR] || #{ENV['HOME']}/.cache/tiktoken/` as default.
+# Once `tiktoken_base_dir` is omitted, it will use the directory `ENV[TIKTOKEN_BASE_DIR] || #{ENV['HOME']}/.riktoken/` as default.
 encoding = Riktoken.encoding_for_model("gpt-4")
 
 # Encode text to tokens
@@ -68,28 +90,6 @@ token_count = encoding.encode("Your text here").length
 | `p50k_base` | text-davinci-003, text-davinci-002, code-davinci-002 | `p50k_base.tiktoken` |
 | `p50k_edit` | text-davinci-edit-001, code-davinci-edit-001 | `p50k_base.tiktoken` |
 | `r50k_base` | text-davinci-001, text-curie-001, text-babbage-001, text-ada-001 | `r50k_base.tiktoken` |
-
-## Setting Up .tiktoken Files
-
-For best accuracy, you should download the official .tiktoken files from OpenAI:
-
-```bash
-# Create cache directory as you like
-mkdir -p ~/.cache/tiktoken
-
-# Download encoding files
-curl -o ~/.cache/tiktoken/cl100k_base.tiktoken \
-  https://raw.githubusercontent.com/openai/tiktoken/main/tiktoken/assets/cl100k_base.tiktoken
-
-curl -o ~/.cache/tiktoken/o200k_base.tiktoken \
-  https://raw.githubusercontent.com/openai/tiktoken/main/tiktoken/assets/o200k_base.tiktoken
-
-# Add other encodings as needed...
-```
-
-The library will search for `.tiktoken` files in the given directory as a parameter `tiktoken_base_dir` (default is `ENV[TIKTOKEN_BASE_DIR] || #{ENV['HOME']}/.cache/tiktoken/`).
-
-NOTE: If no `.tiktoken` file is found, the library will raise an error on loading; it does not fall back to built-in encodings and/or downloads the file automatically. i.e. the user must guarantee that the `.tiktoken` files are available in the specified directory.
 
 ## Usage Examples
 

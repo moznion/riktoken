@@ -64,7 +64,7 @@ module Riktoken
     "gpt-4o" => "o200k_base",
     "gpt-4o-mini" => "o200k_base"
   }.freeze
-  DEFAULT_TIKTOKEN_BASE_DIR = File.join(Dir.home, ".cache", "tiktoken").freeze
+  DEFAULT_TIKTOKEN_BASE_DIR = File.join(Dir.home, ".riktoken").freeze
   TIKTOKEN_BASE_DIR_ENV_KEY = "TIKTOKEN_BASE_DIR"
   private_constant :MODEL_TO_ENCODING, :DEFAULT_TIKTOKEN_BASE_DIR, :TIKTOKEN_BASE_DIR_ENV_KEY
 
