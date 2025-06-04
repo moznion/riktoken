@@ -55,7 +55,7 @@ curl -o ~/.riktoken/o200k_base.tiktoken \
 
 The library will search for `.tiktoken` files in the given directory as a parameter `tiktoken_base_dir` (default is `ENV[TIKTOKEN_BASE_DIR] || #{ENV['HOME']}/.riktoken/`).
 
-**NOTE: If no `.tiktoken` file is found, the library will raise an error on loading; it does not fall back to built-in encodings and/or downloads the file automatically. i.e. the user must guarantee that the `.tiktoken` files are available in the specified directory.**
+**NOTE: If no `.tiktoken` file is found, the library will raise an error on loading; it does not fall back to built-in encodings and/or downloads the file automatically to avoid potential performance degration. i.e. the user must guarantee that the `.tiktoken` files are available in the specified directory.**
 
 ### Synopsis
 
