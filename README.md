@@ -13,6 +13,10 @@ Most of the code is ported from [openai/tiktoken](https://github.com/openai/tikt
 - Special token handling
 - Model-to-encoding mapping
 
+### Limitations
+
+- This library only supports UTF-8 strings. This means the encoder accepts UTF-8 text, and the decoder converts the given token array into a UTF-8 string.
+
 ## Installation
 
 Add this line to your application's Gemfile:
