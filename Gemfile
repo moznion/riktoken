@@ -9,5 +9,5 @@ gem "rake", "~> 13.0"
 gem "minitest", "~> 5.16"
 gem "rubocop", "~> 1.74"
 gem "standard", "~> 1.35"
-gem "rbs-inline", "~> 0.11.0", require: false
+gem "rbs-inline", "~> 0.14.0", require: false
 gem "simplecov", "~> 0.22", require: false
